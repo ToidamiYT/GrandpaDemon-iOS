@@ -1,0 +1,32 @@
+name: Build iOS Geode Mod
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Geode CLI
+        run: |
+          brew install geode-sdk/tap/geode
+
+      - name: Setup Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build iOS
+        run: |
+          geode build -p ios
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GrandpaDemon-iOS
+          path: build/**/*.geode
